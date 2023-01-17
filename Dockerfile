@@ -16,7 +16,9 @@ RUN apt update \
     imap \
     gd \
     # Enable mod_rewrite
-    && a2enmod rewrite
+    && a2enmod rewrite \
+    # Cleanup unnecessary files
+    && rm -rf /var/lib/apt/lists/*
 
 COPY . /var/www/html
 RUN chown -R www-data:www-data /var/www \

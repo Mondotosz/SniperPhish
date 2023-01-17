@@ -4,6 +4,7 @@ services:
     build: .
     depends_on:
       - db
+    restart: unless-stopped
     ports:
       - "${PORT:-80}:80"
     volumes:
@@ -15,6 +16,7 @@ services:
 
   db:
     image: mysql:8
+    restart: unless-stopped
     volumes:
       - db_data:/var/lib/mysql
     environment:
@@ -22,6 +24,20 @@ services:
       MYSQL_PASSWORD: "${MYSQL_PASSWORD:-sniperphish}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-root}"
       MYSQL_DATABASE: "${MYSQL_DATABASE:-sniperphish}"
+  
+  # Mail hog is an email testing tool.
+  # It acts as a simple smtp server and let's us test the mailing system locally.
+  # To read sent emails, access the web interface (port 8025 by default)
+  # To run it, use `docker compose --profile dev up -d --build`
+  mailhog:
+    image: 'mailhog/mailhog:latest'
+    restart: unless-stopped
+    ports:
+        - '${FORWARD_MAILHOG_PORT:-1025}:1025'
+        - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
+    profiles:
+        - dev
+
 
 volumes:
   db_data:
