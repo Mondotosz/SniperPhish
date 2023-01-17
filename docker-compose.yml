@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  sniperphish:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "${PORT:-80}:80"
+    volumes:
+      - spear_config:/var/www/html/spear/config/
+      - spear_uploads:/var/www/html/spear/uploads/
+      - spear_hf:/var/www/html/spear/sniperhost/hf_files/
+      - spear_ht:/var/www/html/spear/sniperhost/ht_files/
+
+
+  db:
+    image: mysql:8
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_USER: "${MYSQL_USER:-sniperphish}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-sniperphish}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-root}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE:-sniperphish}"
+
+volumes:
+  db_data:
+  spear_config:
+  spear_uploads:
+  spear_hf:
+  spear_ht:

@@ -4,6 +4,10 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.php [NC,L]
 
+# Protect sensitive files
+RewriteRule /?\.htaccess$ - [F,L]
+RewriteRule ^/.*\.env$ - [F,L]
+
 # php -- BEGIN cPanel-generated handler, do not edit
 # Set the “ea-php80” package as the default “PHP” programming language.
 <IfModule mime_module>
